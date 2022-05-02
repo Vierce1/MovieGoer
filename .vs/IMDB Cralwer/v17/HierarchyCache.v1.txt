@@ -1,0 +1,259 @@
+﻿++Solution 'IMDB Cralwer' ‎(1 of 1 project)
+i:{00000000-0000-0000-0000-000000000000}:IMDB Cralwer.sln
+++IMDB Cralwer
+i:{00000000-0000-0000-0000-000000000000}:IMDB Cralwer
+++Connected Services 
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:>789
+++Dependencies
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:>788
+++Properties
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\properties\
+++launchSettings.json
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\properties\launchsettings.json
+++wwwroot
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\
+++css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\css\
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\
+++site.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\css\site.css
+++image
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\image\
+++MovieGoerLogo.png
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\image\moviegoerlogo.png
+++js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\js\
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\
+++lib
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\
+++favicon.ico
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\favicon.ico
+++Controllers
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\controllers\
+++HomeController.cs
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\controllers\homecontroller.cs
+++Models
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\models\
+++Director.cs
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\models\director.cs
+++IRepository.cs
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\models\irepository.cs
+++Movie.cs
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\models\movie.cs
+++readme.md
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\models\readme.md
+++ViewModels
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\viewmodels\
+++ErrorViewModel.cs
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\viewmodels\errorviewmodel.cs
+++IMBDViewModel.cs
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\viewmodels\imbdviewmodel.cs
+++SavedViewModel.cs
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\viewmodels\savedviewmodel.cs
+++Views
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\views\
+++Home
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\views\home\
+++IMDB.cshtml
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\views\home\imdb.cshtml
+++Index.cshtml
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\views\home\index.cshtml
+++Privacy.cshtml
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\views\home\privacy.cshtml
+++Shared
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\views\shared\
+++_Layout.cshtml
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\views\shared\_layout.cshtml
+++_ValidationScriptsPartial.cshtml
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\views\shared\_validationscriptspartial.cshtml
+++Error.cshtml
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\views\shared\error.cshtml
+++_ViewImports.cshtml
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\views\_viewimports.cshtml
+++_ViewStart.cshtml
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\views\_viewstart.cshtml
+++appsettings.json
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\appsettings.json
+++DataProcessing.cs
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\dataprocessing.cs
+++Helper.cs
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\helper.cs
+++Program.cs
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\program.cs
+++No service dependencies discovered
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:>790
+++Analyzers
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:analyzers
+++Frameworks
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:frameworks
+++Packages
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:packages
+++site.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\js\site.js
+++bootstrap
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\
+++jquery
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery\
+++jquery-validation
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery-validation\
+++jquery-validation-unobtrusive
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery-validation-unobtrusive\
+++_Layout.cshtml.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\views\shared\_layout.cshtml.css
+++appsettings.Development.json
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\appsettings.development.json
+++MessagePackAnalyzer
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\users\awest\.nuget\packages\messagepackanalyzer\2.1.152\analyzers\dotnet\messagepackanalyzer.dll
+++Microsoft.AspNetCore.Analyzers
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\program files\dotnet\sdk\6.0.201\sdks\microsoft.net.sdk.web\analyzers\cs\microsoft.aspnetcore.analyzers.dll
+++Microsoft.AspNetCore.App.Analyzers
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\program files\dotnet\packs\microsoft.aspnetcore.app.ref\6.0.3\analyzers\dotnet\cs\microsoft.aspnetcore.app.analyzers.dll
+++Microsoft.AspNetCore.App.CodeFixes
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\program files\dotnet\packs\microsoft.aspnetcore.app.ref\6.0.3\analyzers\dotnet\cs\microsoft.aspnetcore.app.codefixes.dll
+++Microsoft.AspNetCore.Components.Analyzers
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\program files\dotnet\sdk\6.0.201\sdks\microsoft.net.sdk.web\analyzers\cs\microsoft.aspnetcore.components.analyzers.dll
+++Microsoft.AspNetCore.Mvc.Analyzers
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\program files\dotnet\sdk\6.0.201\sdks\microsoft.net.sdk.web\analyzers\cs\microsoft.aspnetcore.mvc.analyzers.dll
+++Microsoft.AspNetCore.Razor.SourceGenerator.Tooling.Internal
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\program files\dotnet\sdk\6.0.201\sdks\microsoft.net.sdk.razor\source-generators\microsoft.aspnetcore.razor.sourcegenerator.tooling.internal.dll
+++Microsoft.CodeAnalysis.Analyzers
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\users\awest\.nuget\packages\microsoft.codeanalysis.analyzers\3.3.2\analyzers\dotnet\cs\microsoft.codeanalysis.analyzers.dll
+++Microsoft.CodeAnalysis.CSharp.Analyzers
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\users\awest\.nuget\packages\microsoft.codeanalysis.analyzers\3.3.2\analyzers\dotnet\cs\microsoft.codeanalysis.csharp.analyzers.dll
+++Microsoft.CodeAnalysis.CSharp.NetAnalyzers
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\program files\dotnet\sdk\6.0.201\sdks\microsoft.net.sdk\analyzers\microsoft.codeanalysis.csharp.netanalyzers.dll
+++Microsoft.CodeAnalysis.NetAnalyzers
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\program files\dotnet\sdk\6.0.201\sdks\microsoft.net.sdk\analyzers\microsoft.codeanalysis.netanalyzers.dll
+++Microsoft.Extensions.Logging.Generators
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\program files\dotnet\packs\microsoft.aspnetcore.app.ref\6.0.3\analyzers\dotnet\roslyn4.0\cs\microsoft.extensions.logging.generators.dll
+++Microsoft.NET.Sdk.Razor.SourceGenerators
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\program files\dotnet\sdk\6.0.201\sdks\microsoft.net.sdk.razor\source-generators\microsoft.net.sdk.razor.sourcegenerators.dll
+++System.Text.Json.SourceGeneration
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:c:\program files\dotnet\packs\microsoft.netcore.app.ref\6.0.3\analyzers\dotnet\cs\system.text.json.sourcegeneration.dll
+++Microsoft.AspNetCore.App
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\microsoft.aspnetcore.app
+++Microsoft.NETCore.App
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\microsoft.netcore.app
+++dotConnect.Express.for.PostgreSQL (7.4.506)
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:>810
+++Microsoft.VisualStudio.Web.CodeGeneration.Design (6.0.2)
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:>811
+++Npgsql (6.0.4)
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:>812
+++dist
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery\dist\
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery-validation\dist\
+++LICENSE
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\license
+++LICENSE.txt
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery\license.txt
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery-validation-unobtrusive\license.txt
+++LICENSE.md
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery-validation\license.md
+++jquery.validate.unobtrusive.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.js
+++jquery.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery\dist\jquery.js
+++additional-methods.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery-validation\dist\additional-methods.js
+++jquery.validate.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery-validation\dist\jquery.validate.js
+++jquery.validate.unobtrusive.min.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery-validation-unobtrusive\jquery.validate.unobtrusive.min.js
+++bootstrap.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap.css
+++bootstrap-grid.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css
+++bootstrap-reboot.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css
+++bootstrap-utilities.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css
+++bootstrap.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\bootstrap.js
+++jquery.min.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery\dist\jquery.min.js
+++additional-methods.min.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery-validation\dist\additional-methods.min.js
+++jquery.validate.min.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery-validation\dist\jquery.validate.min.js
+++bootstrap.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap.css.map
+++bootstrap.min.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css
+++bootstrap.rtl.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css
+++bootstrap-grid.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.css.map
+++bootstrap-grid.min.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css
+++bootstrap-grid.rtl.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css
+++bootstrap-reboot.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.css.map
+++bootstrap-reboot.min.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css
+++bootstrap-reboot.rtl.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css
+++bootstrap-utilities.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.css.map
+++bootstrap-utilities.min.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css
+++bootstrap-utilities.rtl.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css
+++bootstrap.bundle.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js
+++bootstrap.esm.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js
+++bootstrap.js.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\bootstrap.js.map
+++bootstrap.min.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js
+++jquery.min.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\jquery\dist\jquery.min.map
+++bootstrap.min.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap.min.css.map
+++bootstrap.rtl.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.css.map
+++bootstrap.rtl.min.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css
+++bootstrap-grid.min.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.min.css.map
+++bootstrap-grid.rtl.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.css.map
+++bootstrap-grid.rtl.min.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css
+++bootstrap-reboot.min.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.min.css.map
+++bootstrap-reboot.rtl.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.css.map
+++bootstrap-reboot.rtl.min.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css
+++bootstrap-utilities.min.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.min.css.map
+++bootstrap-utilities.rtl.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.css.map
+++bootstrap-utilities.rtl.min.css
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css
+++bootstrap.bundle.js.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.js.map
+++bootstrap.bundle.min.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js
+++bootstrap.esm.js.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.js.map
+++bootstrap.esm.min.js
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js
+++bootstrap.min.js.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\bootstrap.min.js.map
+++bootstrap.rtl.min.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap.rtl.min.css.map
+++bootstrap-grid.rtl.min.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-grid.rtl.min.css.map
+++bootstrap-reboot.rtl.min.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-reboot.rtl.min.css.map
+++bootstrap-utilities.rtl.min.css.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\css\bootstrap-utilities.rtl.min.css.map
+++bootstrap.bundle.min.js.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\bootstrap.bundle.min.js.map
+++bootstrap.esm.min.js.map
+i:{ec5a0744-dd56-48f2-b840-e5ca26bf0ddb}:h:\c# projects\imdb cralwer\imdb cralwer\wwwroot\lib\bootstrap\dist\js\bootstrap.esm.min.js.map

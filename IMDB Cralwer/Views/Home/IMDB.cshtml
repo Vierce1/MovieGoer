@@ -1,4 +1,4 @@
-@model IMDBViewModel //this is passed to the homecontroller when you post
+@model IMDBViewModel  //this is passed to the homecontroller when you post
 
 @{
     
@@ -15,6 +15,7 @@
 
 <!-- this is the input box below -->
 <div> 
+    
     @using (Html.BeginForm("IMDB", "Home", FormMethod.Post))
     {<table cellpadding="0" cellspacing="0">
             <tr>
@@ -22,15 +23,34 @@
                 <!-- entering a keyword above should search for Titles AND Genres OR if you enter a year (4 digits) it will search by that-->
             </tr>
             <tr>
-                <td>keyword:</td>
+                <td>Keyword: 
+                    
+                        @Html.TextBoxFor(m => m.titleInput, new {onKeyDown="blockSpace()", value=""})
+                    <input type="submit" value="Submit"/>
+                    
+                </td>
+            </tr>
+           @*  <tr>
+                <th colspan="2" align="center">Enter a year around which you would like to see a movie (leave blank to see all results).</th> 
+                <!-- entering a keyword above should search for Titles AND Genres OR if you enter a year (4 digits) it will search by that-->
+            </tr>*@
+@*            <tr>
+                <td>Movie Year:</td>
                 <td>
                     @Html.TextBoxFor(m => m.titleInput)
                 </td>
-            </tr>
+            </tr>*@
+
+           
+
+
+                        
             <tr>
-                <td></td>
-                <td><input type="submit" value="Submit"/></td>
+                <td>
+                @Html.CheckBoxFor(m=> m.shortMovie) Give me a short movie!
+                </td>
             </tr>
+            
         </table>}
 </div>
 
@@ -38,78 +58,113 @@
 
 <!-- displays on the page if model is not null and we've hit submit-->
 <div >
-@if (Model != null && Model.submitted)
-{
-    <p>Searched keyword: <strong> @Html.DisplayFor(m => m.titleInput) </strong></p> 
-    <p>Done! Here is what I found for you. </p> 
+@if (Model != null )
+    {
+        <br /><br />
+        <p>Searched keyword: <strong> @Html.DisplayFor(m => m.titleInput) </strong></p> 
+        <p>Done! Here is what I found for you. </p> 
 
 
-<table class="table table-bordered">
-    <thead class="table-new">
-    <tr>
-        <th>
-            Watched
-        </th>
-        <th>
-            Title
-        </th>
-        <th>
-            Rating
-        </th>
-        <th>
-            Genre
-        </th>
-        <th>
-            Runtime
-        </th>
-        <th>
-            Event
-        </th>
-    </tr>
-    </thead>
-    <tbody>
-        @for(int i = 0; i < Model.movieList.Count; i++)
-        {
-            if (!Model.returnedMovieTitles.Contains(Model.movieList[i].title))
-            {
+        <table class="table table-hover">
+            <thead class="table-new">
                 <tr>
-                    <td>
-                         @*recolor the row if watched*@
-                        @Html.CheckBoxFor(m=> m.movieList[i].isWatched)
-                    </td>
-                    <td>
-                <p> <strong>@Html.DisplayFor(model => Model.movieList[i].title)  <br /> </strong></p>
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => Model.movieList[i].rating)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => Model.movieList[i].genre)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => Model.movieList[i].runtime)
-                    </td>
-                    <td>
-                        @Html.DisplayFor(model => Model.movieList[i].worldEvent)
-                    </td>
-                    </tr>
+                    <th>
+                        Title
+                    </th>
+                    <th>
+                        Rating
+                    </th>
+                    <th>
+                        Genre
+                    </th>
+                    <th>
+                        Runtime (min)
+                    </th>
+                    <th>
+                        Event
+                    </th>
+                    <th>
+                        Top Billboard Artist
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
 
-                    //how to display in table with other data?
-                    Model.returnedMovieTitles.Add(Model.movieList[i].title);
+                @for (int i = 0; i < Model.movieList.Count; i++)
+                {
+                    if (!Model.returnedMovieTitles.Contains(Model.movieList[i].title))
+                    {
+
+                        <tr>
+                            
+                                @*recolor the row if watched
+                                    <asp:CheckBox id="Checkbox" OnCheckedChanged="OnCheckChange" AutoPostBack="True" runat="server"/>*@
+                                @Html.CheckBoxFor(m=> m.movieList[i].isWatched, new {Value = @Model.movieList[i].isWatched, @OnClick="OnCheckChange()"})
+                                
+                                    @*@Html.HiddenFor(m => m.movieList[i].title)*@
+@*
+                                <input data-val="true" 
+                                data-val-required="The isActive field is required." 
+                                id="isWatched" 
+                                name="isWatched" 
+                                type="checkbox" 
+                                value="true" />
+                                <input name="isActive" type="hidden" value="false" />*@
+
+
+
+
+                                                       
+                            <td>
+                                <p> <strong>@Html.DisplayFor(model => Model.movieList[i].title)  <br /> </strong></p>
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => Model.movieList[i].rating)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => Model.movieList[i].genre)
+                            </td>
+                            <td>
+                                @if(Model.movieList[i].runtime != 0)
+                                {
+                                    @Html.DisplayFor(model => Model.movieList[i].runtime)
+                                }
+                                
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => Model.movieList[i].worldEvent)
+                            </td>
+                            <td>
+                                @Html.DisplayFor(model => Model.movieList[i].artist)
+                            </td>
+                        </tr>
+
+
+                        //how to display in table with other data?
+                        Model.returnedMovieTitles.Add(Model.movieList[i].title);
+
+
+                    }
                 }
-        }
-        </tbody>
+                
 
-</table>
-@*        <script> //js fill table
+
+            </tbody>
+
+        </table>
+@*                    @using (Html.BeginForm("IMDB", "Home", FormMethod.Post)){
+        <input type="submit" value="Submit"/>
+                    }*@
+
+        @*        <script> //js fill table
             function(){
-                var 
+            var 
             }
-        </script>*@
-        
-@*</div>*@
-}
-<br />
+            </script>*@
+
+        @*</div>*@
+    }
+    <br />
 </div>
 
 

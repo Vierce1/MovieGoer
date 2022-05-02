@@ -16,6 +16,10 @@ namespace IMDB_Cralwer.Controllers
 {
     public class HomeController : Controller
     {
+        IMDBViewModel viewModel;
+        DataProcessing dp;
+        public List<Movie> watchedMovies { get; set; }
+
         private readonly ILogger<HomeController> _logger;
 
         public HomeController(ILogger<HomeController> logger)
@@ -26,7 +30,7 @@ namespace IMDB_Cralwer.Controllers
         
         public IActionResult Index()
         {
-
+            dp = new DataProcessing();
             return View();
 
         }
@@ -41,19 +45,12 @@ namespace IMDB_Cralwer.Controllers
         public IActionResult IMDB() //returns the view when you enter the page
         {
 
-            // dummy data
-            //Director aj = new Director(){name = "Andrew Adamson"};
-            //Director vj = new Director(){name = "Vicky Jenson"};
-
-            //Movie shrek = new Movie(){
-            //    title =  "Shrek",
-            //    directors = new List<Director>(){aj, vj},
-            //    releaseDate = "May 18, 2001",
-            //    rating = 100
-            //};
-
-
-            //return View(new IMDBViewModel { movies = new List<Movie>() { shrek } });
+            //IMDBViewModel m = new IMDBViewModel();
+            //if (viewModel != null)
+            //{
+            //    //m.movieList = viewModel.movieList;
+            //    return View(viewModel);
+            //}
 
             return View();
         }
@@ -63,19 +60,19 @@ namespace IMDB_Cralwer.Controllers
         {
             Console.WriteLine(m.titleInput); //this returns the correct input word
 
-            int year = 0;
-            bool useYear = false;
-            if (int.TryParse(word, out year)) //change to another field
-            {
-                if (Convert.ToInt32(word) <= 2022 && Convert.ToInt32(word) > 1950)
-                {
-                    useYear = true;
-                    //treat as a year
-                    //use word now since it is a string
-                    //now query the year table instead
-                }
+            //int year = 0;
+            //bool useYear = false;
+            //if (int.TryParse(word, out year)) //change to another field
+            //{
+            //    if (Convert.ToInt32(word) <= 2022 && Convert.ToInt32(word) > 1950)
+            //    {
+            //        useYear = true;
+            //        //treat as a year
+            //        //use word now since it is a string
+            //        //now query the year table instead
+            //    }
 
-            }
+            //}
 
 
 
@@ -92,28 +89,43 @@ namespace IMDB_Cralwer.Controllers
             query = "SELECT * " +
                 "FROM(SELECT mov_table.title, movie_basics.rating, movie_basics.year, genre, runtime " +
                 " FROM mov_table JOIN movie_basics ON mov_table.title = movie_basics.title " +
-                "  WHERE mov_table.title LIKE (@p1))" +
+                "  WHERE mov_table.title LIKE (@p1) " +
+                "OR  mov_table.title LIKE (@p2) " +
+                "OR movie_basics.genre LIKE (@p3))" +
                 " AS newTable JOIN world_events ON world_events.year = newTable.year " +
-                "ORDER BY rating DESC";
+                "JOIN songs ON songs.year = newTable.year " +
+                "ORDER BY rating DESC "+
+                "LIMIT 150";
 
-
-            //use pgadmin copy query to try
-            
-            //need rating too
-            //need to now change the query to pull from a new relational table that includes rating, year, etc
-            //need to update Movie to include year, rating, etc properties
-
-            if (useYear) 
+            if (m.shortMovie)
             {
-                //query = "SELECT event FROM world_events WHERE year = word";
+                Console.WriteLine("Short movie picked");
+                query  = "SELECT * " +
+                "FROM(SELECT mov_table.title, movie_basics.rating, movie_basics.year, genre, runtime " +
+                " FROM mov_table JOIN movie_basics ON mov_table.title = movie_basics.title " +
+                "  WHERE mov_table.title LIKE (@p1) AND movie_basics.runtime < 100 AND movie_basics.runtime != 0 " +
+                "OR  mov_table.title LIKE (@p2) AND movie_basics.runtime < 100 AND movie_basics.runtime != 0 " +
+                "OR movie_basics.genre LIKE (@p3) AND movie_basics.runtime < 100 AND movie_basics.runtime != 0) " +
+                " AS newTable JOIN world_events ON world_events.year = newTable.year " +
+                "JOIN songs ON songs.year = newTable.year " +
+                "ORDER BY rating DESC " +
+                "LIMIT 150";
             }
+
+
+            //if (useYear) 
+            //{
+            //    //query = "SELECT event FROM world_events WHERE year = word";
+            //}
 
 
             await using var command = new NpgsqlCommand(query, conn)
             {
                 Parameters =
                 {
-                    new("@p1", "%" +word+ "%")
+                    new("@p1", "%" +word+ "%"),
+                    new("@p2", "%" +word+ " %"),
+                    new("@p3", "%" +word+ "%")
                 }
             };
 
@@ -146,15 +158,22 @@ namespace IMDB_Cralwer.Controllers
 
             while (await reader.ReadAsync())
             {
-                
+
                 //m.movieList.Add(reader.GetData(0));
 
-
                 //string[] s = new string[7] { reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString() };
-                string[] s = new string[6] { GetSafeString(reader, 0), GetSafeString(reader, 1), GetSafeString(reader, 2), GetSafeString(reader, 3), GetSafeString(reader, 4), GetSafeString(reader, 5) };
+                string[] s = new string[6] { GetSafeString(reader, 0), GetSafeString(reader, 1), GetSafeString(reader, 2), GetSafeString(reader, 3),  GetSafeString(reader, 5), GetSafeString(reader, 8)};
 
                 for (int i = 0; i < s.Length; i++)
                 {
+                    bool isWatched = false;
+                    foreach (Movie mov in m.movieList) //check if the movie is already watched
+                    {
+                        if (mov.isWatched && mov.title == s[0])
+                        {
+                            isWatched = true;
+                        }
+                    }
 
                     myMovies.Add(
                     new Movie
@@ -167,22 +186,15 @@ namespace IMDB_Cralwer.Controllers
                         types = "",
                         attributes = "",
                         isOriginalTitle = "",
-                        worldEvent = s[5],
-                        rating = s[1],                        
+                        worldEvent = s[4],
+                        rating = s[1],
                         genre = s[3],
-                        runtime = s[4]
+                        runtime = reader.GetInt16(4),
+                        isWatched = isWatched,
+                        artist = s[5]
 
-                        //title = s[1],
-                        //titleId = s[0],
-                        //region = s[2],
-                        //language = s[3],
-                        //types = s[4],
-                        //attributes = s[5],
-                        //isOriginalTitle = s[6],
-                        //worldEvent = "",
-                        //year = ""
 
-                    });
+                    }) ;
 
 
 
@@ -198,32 +210,90 @@ namespace IMDB_Cralwer.Controllers
             conn.Close();
 
 
-                if (myMovies != null && myMovies.Count > 1)
-                {
-                    //Console.WriteLine(myMovies.Count);
-                    //Console.WriteLine(myMovies[0].title);
-                    m.movieList = myMovies.ToList();
-                    
+            if (myMovies != null && myMovies.Count > 1)
+            {
 
-                    //foreach(Movie mov in myMovies)
-                    //{
-                    //    m.returnedMovieTitles.Add( FetchStrings("Title", mov)); //get a list of the titles only to display
-                    //}
-                }
+                m.movieList = myMovies.ToList();
+            }
 
-                Console.Write(m.movieList.Count);
+
+                //foreach(Movie mov in myMovies)
+                //{
+                //    m.returnedMovieTitles.Add( FetchStrings("Title", mov)); //get a list of the titles only to display
+                //}
+            
+
             //RedirectToAction("Create", "Home");
         }
+
 
         [HttpPost]
         public  IActionResult IMDB(IMDBViewModel m)
         {
+            //if (viewModel == null)
+            //{
+            //    viewModel = m;
+            //}
+            //else
+            //{
+            //    m = viewModel;
+            //    Console.WriteLine("View model not null");
+            //}
 
-            ProcessKeyWord(m.titleInput, m);
+            if (m.titleInput != "")
+            {
+                ProcessKeyWord(m.titleInput, m);
+            }
             System.Threading.Thread.Sleep(500); //crucial - makes system pause while loading results from ProcessKeyWord()
+
+            //if (m.movieList != null && m.movieList.Count > 0)
+            //{
+            //    Console.WriteLine("MovieList not null");  
+            //    SaveWatchedMovies(m); 
+            //    System.Threading.Thread.Sleep(500);
+            //}
+            //else 
+            //{ 
+            //    Console.WriteLine("Null"); 
+            //}
+
+
+            
+            int k = 0;
+            for(int i = 0; i < m.movieList.Count; i++)
+            {
+                if (m.movieList[i].isWatched)
+                {
+                    k++;
+                }
+            }
+            //Console.WriteLine(k + "  watched");
+
+
 
             return View(m);
         }
+
+
+        public void SaveWatchedMovies(IMDBViewModel m)
+        {
+            foreach (Movie movie in m.movieList)
+            {
+                //Console.WriteLine(movie.title);
+                if (movie.isWatched)
+                {
+                    watchedMovies.Add(movie);
+                    Console.WriteLine("Added " + movie.title);
+                }
+            }
+        }
+
+        public void SaveWatchedMovieChecked(Movie mov)
+        {
+            watchedMovies.Add(mov);
+            Console.WriteLine(mov.title + " Added");
+        }
+
 
         public string FetchStrings(string requestedMovieProperty, Movie mov)
         {
@@ -234,6 +304,8 @@ namespace IMDB_Cralwer.Controllers
             }
             return "";
         }
+
+
 
         private string GetSafeString(NpgsqlDataReader reader, int colindex)
         {
@@ -247,14 +319,11 @@ namespace IMDB_Cralwer.Controllers
             }
         }
 
-
-        //[HttpPost]
-        //public IActionResult IMDB(, IMDBViewModel m)
-        //{
-        //    bool chcked = Convert.ToBoolean(frm);
-        //    Console.WriteLine(chcked);
-        //    return View(m);
-        //}
+        public void OnCheckChange()
+        {
+            Console.WriteLine("Ran OnCheckChagne");
+            //Response.Write(Request.RawUrl.ToString());
+        }
 
 
         //[HttpPost]

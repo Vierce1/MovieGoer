@@ -12,9 +12,10 @@ namespace IMDB_Cralwer.Models
         public string isOriginalTitle { get; set; }
         public string year { get; set; }
         public string worldEvent { get; set; }
+        public string artist { get; set; }
         public string rating { get; set; }
         public string genre { get; set; }
-        public string runtime { get; set; }
+        public int runtime { get; set; }
         public bool isWatched { get; set; }
 
         //public List<Director> directors {get; set;}

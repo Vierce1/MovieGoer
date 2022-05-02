@@ -1,5 +1,5 @@
 using IMDB_Cralwer.Models;
-
+using System.Web;
 
 namespace IMDB_Cralwer.ViewModels
 {
@@ -13,15 +13,27 @@ namespace IMDB_Cralwer.ViewModels
 
         public List<Movie> userWatchedMovies { get; set; }
 
+        public bool shortMovie { get; set; } = false;
 
         public IMDBViewModel() //does this get called every time you go to this page?
         {
             titleInput = string.Empty;
-            movieList = new List<Movie>();
+
+
+            if (movieList == null)
+            {                
+                movieList = new List<Movie>();
+            }
+
+
             returnedMovieTitles = new List<string>();
             submitted = true;
-            userWatchedMovies = new List<Movie>();
+
+            if (userWatchedMovies == null)
+            { userWatchedMovies = new List<Movie>(); }
         }
+
+
     }
 
     
