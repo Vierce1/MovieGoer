@@ -1,0 +1,1 @@
+# this folder is for business logic-y models. they should have a corresponding viewmodel in /ViewModels (or be used in some other combination of models into a single ViewModel)
