@@ -101,7 +101,7 @@ namespace IMDB_Cralwer.Controllers
 
 
 
-            string genre = " genre LIKE ";
+            string genre = " mbasic.genre LIKE ";
             if (m.shortMovie)
             {
 
@@ -110,19 +110,19 @@ namespace IMDB_Cralwer.Controllers
                 {
                     case 1: genre = ""; break;
                     case 2:
-                        genre += " 'Action\"' AND ";
+                        genre += " 'Action' AND ";
                         break;
                     case 3:
-                        genre += " 'Comedy\"' AND ";
+                        genre += " 'Comedy' AND ";
                         break;
                     case 4:
-                        genre += " 'Drama\"' AND ";
+                        genre += " 'Drama' AND ";
                         break;
                     case 5:
-                        genre += " 'Sci-Fi\"' AND ";
+                        genre += " 'Sci-Fi' AND ";
                         break;
                     case 6:
-                        genre += " 'Crime\"' AND ";
+                        genre += " 'Crime' AND ";
                         break;
 
 
@@ -147,19 +147,19 @@ namespace IMDB_Cralwer.Controllers
                 {
                     case 1: genre = ""; break;
                     case 2:
-                        genre += " 'Action\"' AND ";
+                        genre += " 'Action' AND ";
                         break;
                     case 3:
-                        genre += " 'Comedy\"' AND ";
+                        genre += " 'Comedy' AND ";
                         break;
                     case 4:
-                        genre += " 'Drama\"' AND ";
+                        genre += " 'Drama' AND ";
                         break;
                     case 5:
-                        genre += " 'Sci-Fi\"' AND ";
+                        genre += " 'Sci-F' AND ";
                         break;
                     case 6:
-                        genre += " 'Crime\"' AND ";
+                        genre += " 'Crime' AND ";
                         break;
                 }
 
@@ -179,12 +179,7 @@ namespace IMDB_Cralwer.Controllers
             query += "ORDER BY rating DESC " +
                 "LIMIT 150";
 
-            query = "SELECT * " +
-                "FROM (SELECT mov_table.title, mbasic.rating, mbasic.year, genre, runtime , mbasic.titleid " +
-                " FROM mov_table JOIN mbasic ON mov_table.title = mbasic.title " +
-                ") " +
-                " AS newTable JOIN world_events ON world_events.year = newTable.year " +
-                "JOIN songs ON songs.year = newTable.year ";
+
 
             //if (useYear) 
             //{
@@ -233,7 +228,7 @@ namespace IMDB_Cralwer.Controllers
 
 
                 //string[] s = new string[7] { reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString() };
-                string[] s = new string[6] { GetSafeString(reader, 0), GetSafeString(reader, 1), GetSafeString(reader, 2), TrimLastChar(GetSafeString(reader, 3)), GetSafeString(reader, 6), GetSafeString(reader, 9) };
+                string[] s = new string[6] { GetSafeString(reader, 0), GetSafeString(reader, 1), GetSafeString(reader, 2), GetSafeString(reader, 3), GetSafeString(reader, 6), GetSafeString(reader, 9) };
 
                 for (int i = 0; i < s.Length; i++)
                 {
@@ -265,10 +260,10 @@ namespace IMDB_Cralwer.Controllers
                         artist = s[5],
 
                         wikiLink = "https://www.wikipedia.org/wiki/" + s[2],
-                        imdbLink = "https://www.imdb.com/title/" + TrimFirstChar(GetSafeString(reader, 5))
+                        imdbLink = "https://www.imdb.com/title/" + reader[5].ToString()
 
 
-                    });
+                    });;
 
 
 
@@ -299,7 +294,7 @@ namespace IMDB_Cralwer.Controllers
             {
                 ProcessKeyWord(m.titleInput, m);
             }
-            System.Threading.Thread.Sleep(1000); //crucial - makes system pause while loading results from ProcessKeyWord()
+            System.Threading.Thread.Sleep(1200); //crucial - makes system pause while loading results from ProcessKeyWord()
 
 
             
