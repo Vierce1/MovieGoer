@@ -15,12 +15,16 @@ using Microsoft.JSInterop;
 
 namespace IMDB_Cralwer.Controllers
 {
+
     public class HomeController : Controller
     {
-        IMDBViewModel viewModel;
-        DataProcessing dp;
 
-   
+
+        public string connectionString = "postgres://ntzgackjldsuog:73596861aaa9efc5b6d46b5c814d1a904bab53a202b08a9d72779915e716a47c@ec2-44-195-169-163.compute-1.amazonaws.com:5432/de7mbvodl8cjk9";
+        bool useridExists;
+        public string userId;
+        public string userPassword;
+
         public List<Movie> watchedMovies { get; set; }
 
         private readonly ILogger<HomeController> _logger;
@@ -33,10 +37,192 @@ namespace IMDB_Cralwer.Controllers
         
         public IActionResult Index()
         {
-            dp = new DataProcessing();
+            
             return View();
 
         }
+
+
+
+
+        //register / sign in buttons
+        public IActionResult RegisterOnClick( IndexViewModel m)
+        {
+            Console.WriteLine("Clicked register");
+            Console.WriteLine(m.userName);
+
+            if (m.userName != null && m.userName.Length > 0 && m.userName.Length < 20)
+            {
+                //first check sql tale to see if username already exists.
+                ProcessUserReg(m.userName, m);
+            }
+            else
+            {
+                m.usernameInvalid = true;
+            }
+            System.Threading.Thread.Sleep(2200);
+            Console.WriteLine("Reloading");
+
+            //return RedirectToAction("Index", m);
+            return View("Index", m);
+        }
+
+
+        async void ProcessUserReg(string username, IndexViewModel m)
+        {
+
+            string connString = GetConnectionStringNPG(connectionString);
+            //set up and open the connection
+            await using var conn = new NpgsqlConnection(connString); //create the connection
+            await conn.OpenAsync();
+
+            string query = "SELECT * FROM user_reg WHERE userid =  (@p1)";
+
+
+            await using var command = new NpgsqlCommand(query, conn)
+            {
+                Parameters =
+                {
+                    new("@p1", username)
+                }
+            };
+
+            await using var reader = await command.ExecuteReaderAsync(); //now we have selected the objects (rows) that fit
+
+
+            if (reader != null && reader.HasRows)
+            {
+                while (await reader.ReadAsync())
+                {
+
+                    string s = reader.GetString(0);
+                    if (s == null)
+                    {
+                        useridExists = false;
+
+                    }
+                    else
+                    {
+                        if (s.Length < 6 || s.Length > 20)
+                        {
+                            m.usernameInvalid = true;
+                        }
+                        else
+                        {
+                            useridExists = true;
+                            m.usernameTaken = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                useridExists = false;
+            }
+            conn.Close();
+
+            Console.WriteLine("user id  exists = "  +  useridExists.ToString());
+
+            AddUserReg(m);
+        }
+
+        async void AddUserReg(IndexViewModel m)
+        {
+            if (m.password != null && m.password.Length > 8 && m.password.Length < 20 && !useridExists)
+            {
+                string hashedPW = new DataProcessing().AcceptPassword(m.password);
+
+                //sql command to add user to database
+                string connString = GetConnectionStringNPG(connectionString);
+                await using var conn = new NpgsqlConnection(connString); //create the connection
+                await conn.OpenAsync();
+
+                string query = "INSERT INTO user_reg VALUES ((@p1), (@p2))";
+                await using var command = new NpgsqlCommand(query, conn)
+                {
+                    Parameters =
+                    {
+                        new("@p1", m.userName),
+                        new ("@p2", hashedPW)
+                    }
+                };
+
+                await using var reader = await command.ExecuteReaderAsync();
+
+                conn.Close();
+
+
+            }
+            else if(useridExists)
+            {
+                m.passwordInvalid = true;
+            }
+
+
+            Console.WriteLine("Finsihed reg");
+            
+        }
+
+
+
+        public IActionResult SignInOnClick(IndexViewModel m)
+        {
+            Console.WriteLine("Clicked Sign In");
+            //now query the db to see if registration exists, then update the controller
+            SignInUser(m);
+
+            System.Threading.Thread.Sleep(2200);
+            
+
+            //return RedirectToAction("Index");
+            return View("Index", m);
+        }
+
+        async void SignInUser(IndexViewModel m)
+        {
+            string hashedPW = new DataProcessing().AcceptPassword(m.password);
+
+            string connString = GetConnectionStringNPG(connectionString);
+            await using var conn = new NpgsqlConnection(connString); //create the connection
+            await conn.OpenAsync();
+
+            string query = "SELECT * FROM user_reg WHERE userid = (@p1) AND password = (@p2)";
+            await using var command = new NpgsqlCommand(query, conn)
+            {
+                Parameters =
+                    {
+                        new("@p1", m.userName),
+                        new ("@p2", hashedPW)
+                    }
+            };
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            if (reader != null && reader.HasRows)
+            {
+                while (await reader.ReadAsync())
+                {
+                    //if the query[0] matches username, and we found the correct password, sign in user
+                    string s = reader.GetString(0);
+                    if (s == m.userName)
+                    {
+                        m.signedIn = true;
+
+                    }
+                    else
+                    {
+                        m.couldNotSignIn = true;
+                    }
+                }
+            }
+            else
+            {
+                m.couldNotSignIn = true;
+            }
+
+            conn.Close();
+        }
+
 
         public IActionResult Privacy()
         {
@@ -78,21 +264,22 @@ namespace IMDB_Cralwer.Controllers
             //}
             Console.WriteLine("Genre =  " + m.chosenGenreId);
 
+            m.clickedSubmit = true;
 
             //get the connection string from DATABASE_URL = this comes from environment var. On localhost, it will come from path defined in sys properties. When deploying online, will receive it from the database
             //var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
-            var connectionString = "postgres://ntzgackjldsuog:73596861aaa9efc5b6d46b5c814d1a904bab53a202b08a9d72779915e716a47c@ec2-44-195-169-163.compute-1.amazonaws.com:5432/de7mbvodl8cjk9";
+
 
             //convert conn string to proper format for Npgsql commands
-            connectionString = GetConnectionStringNPG(connectionString);
+            string connString = GetConnectionStringNPG(connectionString);
             
             //postgres database connection string
             //var connectionString = "postgres://ntzgackjldsuog:73596861aaa9efc5b6d46b5c814d1a904bab53a202b08a9d72779915e716a47c@ec2-44-195-169-163.compute-1.amazonaws.com:5432/de7mbvodl8cjk9";
 
-            Console.WriteLine(connectionString);
+            Console.WriteLine(connString);
 
             //set up and open the connection
-            await using var conn = new NpgsqlConnection(connectionString); //create the connection
+            await using var conn = new NpgsqlConnection(connString); //create the connection
             await conn.OpenAsync();
 
             

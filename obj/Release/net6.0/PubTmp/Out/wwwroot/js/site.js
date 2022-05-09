@@ -17,6 +17,13 @@ function blockSpace()
     }
 }
 
+
+
+//function registerOnClick(object sender, EventArgs e)
+//{
+//    window.alert();
+//}
+
 //function changeCheckBox(viewModel, movie)
 //{
 //    console.error("aslkdfj");

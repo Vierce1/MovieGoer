@@ -22,7 +22,7 @@ namespace IMDB_Cralwer.ViewModels
         public bool scifiGenre { get; set; } = false;
         public bool crimeGenre { get; set; } = false;
         public bool dramaGenre { get; set; } = false;
-
+        public bool clickedSubmit { get; set; } = false;
         public IMDBViewModel() //does this get called every time you go to this page?
         {
             titleInput = string.Empty;
