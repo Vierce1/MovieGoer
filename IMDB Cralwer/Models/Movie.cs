@@ -18,6 +18,9 @@ namespace IMDB_Cralwer.Models
         public int runtime { get; set; }
         public bool isWatched { get; set; }
 
+        public string wikiLink { get; set; }
+        public string imdbLink  { get; set; }
+
         //public List<Director> directors {get; set;}
         //public string releaseDate {get; set;} // should this actually be a string?
         //public int rating {get; set;}

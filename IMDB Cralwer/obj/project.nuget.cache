@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "LZETxEj8bVkNjxHc9LrrS4HXPL0ranJCyyV+3lWZNDGtY4HlJrfOUIOtUCfeylJeHnWgqUZLOITSDVZLeSkkog==",
+  "dgSpecHash": "yG0CnPD4CHfK97Y3psOZOq0TAHZxG3Xx/4ivO6RYlXBZE0buI6SGYkyGJ693z8YEDT3j6v88OCnBcZgHOrT88w==",
   "success": true,
-  "projectFilePath": "H:\\C# Projects\\IMDB Cralwer\\IMDB Cralwer\\IMDB Cralwer.csproj",
+  "projectFilePath": "H:\\MovieGoer - Copy - before connectionstring\\IMDB Cralwer\\MovieGoer.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\awest\\.nuget\\packages\\dotconnect.express.for.postgresql\\7.4.506\\dotconnect.express.for.postgresql.7.4.506.nupkg.sha512",
     "C:\\Users\\awest\\.nuget\\packages\\humanizer.core\\2.2.0\\humanizer.core.2.2.0.nupkg.sha512",

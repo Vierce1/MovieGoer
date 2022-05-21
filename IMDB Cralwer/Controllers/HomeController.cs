@@ -12,15 +12,25 @@ using System.Data;
 using System.Data.SqlClient;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Microsoft.AspNetCore.Session;
+using Microsoft.AspNetCore.Http;
+
 namespace IMDB_Cralwer.Controllers
 {
+
     public class HomeController : Controller
     {
-        IMDBViewModel viewModel;
-        DataProcessing dp;
-        public List<Movie> watchedMovies { get; set; }
+
+
+        public string connectionString = "postgres://ntzgackjldsuog:73596861aaa9efc5b6d46b5c814d1a904bab53a202b08a9d72779915e716a47c@ec2-44-195-169-163.compute-1.amazonaws.com:5432/de7mbvodl8cjk9";
+        bool useridExists;
+         public string userId;
+
+        public List<string> watchedMovieTitles;
 
         private readonly ILogger<HomeController> _logger;
+
+        IRepository userRepos;
 
         public HomeController(ILogger<HomeController> logger)
         {
@@ -30,10 +40,217 @@ namespace IMDB_Cralwer.Controllers
         
         public IActionResult Index()
         {
-            dp = new DataProcessing();
+            //var builder = WebApplication.CreateBuilder();
+            //builder.Services.AddDistributedMemoryCache();
+
+            //builder.Services.AddSession(options =>
+            //{
+            //    options.IdleTimeout = TimeSpan.FromSeconds(100);
+            //    options.Cookie.HttpOnly = true;
+            //    options.Cookie.IsEssential = true;
+            //});
+
+            //IMDB_Cralwer.UseSession();
+
+
+
             return View();
 
         }
+
+
+
+
+        //register / sign in buttons
+        public IActionResult RegisterOnClick( IndexViewModel m)
+        {
+            Console.WriteLine("Clicked register");
+            Console.WriteLine(m.userName);
+
+            if (m.userName != null && m.userName.Length > 0 && m.userName.Length < 20 && m.password != null && m.password.Length > 0)
+            {
+                //first check sql tale to see if username already exists.
+                ProcessUserReg(m.userName, m);
+            }
+           
+            else
+            {
+                m.usernameInvalid = true;
+            }
+            System.Threading.Thread.Sleep(2200);
+            Console.WriteLine("Reloading");
+
+            //return RedirectToAction("Index", m);
+            return View("Index", m);
+        }
+
+
+        async void ProcessUserReg(string username, IndexViewModel m)
+        {
+
+            string connString = GetConnectionStringNPG(connectionString);
+            //set up and open the connection
+            await using var conn = new NpgsqlConnection(connString); //create the connection
+            await conn.OpenAsync();
+
+            string query = "SELECT * FROM user_reg WHERE userid =  (@p1)";
+
+
+            await using var command = new NpgsqlCommand(query, conn)
+            {
+                Parameters =
+                {
+                    new("@p1", username)
+                }
+            };
+
+            await using var reader = await command.ExecuteReaderAsync(); //now we have selected the objects (rows) that fit
+
+
+            if (reader != null && reader.HasRows)
+            {
+                while (await reader.ReadAsync())
+                {
+
+                    string s = reader.GetString(0);
+                    if (s == null)
+                    {
+                        useridExists = false;
+
+                    }
+                    else
+                    {
+                        if (s.Length < 6 || s.Length > 20)
+                        {
+                            m.usernameInvalid = true;
+                        }
+                        else
+                        {
+                            useridExists = true;
+                            m.usernameTaken = true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                useridExists = false;
+            }
+            conn.Close();
+
+            Console.WriteLine("user id  exists = "  +  useridExists.ToString());
+
+            AddUserReg(m);
+        }
+
+        async void AddUserReg(IndexViewModel m)
+        {
+            if (m.password != null && m.password.Any(char.IsDigit) && m.password.Length > 8 && m.password.Length < 20 && !useridExists )
+            {
+                string hashedPW = new DataProcessing().AcceptPassword(m.password);
+
+                //sql command to add user to database
+                string connString = GetConnectionStringNPG(connectionString);
+                await using var conn = new NpgsqlConnection(connString); //create the connection
+                await conn.OpenAsync();
+
+                string query = "INSERT INTO user_reg VALUES ((@p1), (@p2))";
+                await using var command = new NpgsqlCommand(query, conn)
+                {
+                    Parameters =
+                    {
+                        new("@p1", m.userName),
+                        new ("@p2", hashedPW)
+                    }
+                };
+
+                await using var reader = await command.ExecuteReaderAsync();
+
+                conn.Close();
+
+
+            }
+            else 
+            {
+                m.passwordInvalid = true;
+            }
+
+
+            Console.WriteLine("Finsihed reg");
+            
+        }
+
+
+
+        public IActionResult SignInOnClick(IndexViewModel m)
+        {
+            Console.WriteLine("Clicked Sign In");
+            //now query the db to see if registration exists, then update the controller
+            if (m.userName != null && m.password != null && m.password.Length > 0)
+            {
+                SignInUser(m);
+                System.Threading.Thread.Sleep(2200);
+
+
+                //return RedirectToAction("Index");
+                return View("Index", m);
+            }
+
+            //if no info is entered, refresh page
+            return View("Index");
+           
+        }
+
+        async void SignInUser(IndexViewModel m)
+        {
+            string hashedPW = new DataProcessing().AcceptPassword(m.password);
+
+            string connString = GetConnectionStringNPG(connectionString);
+            await using var conn = new NpgsqlConnection(connString); //create the connection
+            await conn.OpenAsync();
+
+            string query = "SELECT * FROM user_reg WHERE userid = (@p1) AND password = (@p2)";
+            await using var command = new NpgsqlCommand(query, conn)
+            {
+                Parameters =
+                    {
+                        new("@p1", m.userName),
+                        new ("@p2", hashedPW)
+                    }
+            };
+
+            await using var reader = await command.ExecuteReaderAsync();
+
+            if (reader != null && reader.HasRows)
+            {
+                while (await reader.ReadAsync())
+                {
+                    //if the query[0] matches username, and we found the correct password, sign in user
+                    string s = reader.GetString(0);
+                    if (s == m.userName)
+                    {
+                        m.signedIn = true;
+                        userId = m.userName;
+
+                        HttpContext.Session.SetString("UserSession", userId);
+
+                        userRepos = new UserRepository(userId);
+                    }
+                    else
+                    {
+                        m.couldNotSignIn = true;
+                    }
+                }
+            }
+            else
+            {
+                m.couldNotSignIn = true;
+            }
+
+            conn.Close();
+
+        }
+
 
         public IActionResult Privacy()
         {
@@ -44,15 +261,9 @@ namespace IMDB_Cralwer.Controllers
         [HttpGet]
         public IActionResult IMDB() //returns the view when you enter the page
         {
+            
 
-            //IMDBViewModel m = new IMDBViewModel();
-            //if (viewModel != null)
-            //{
-            //    //m.movieList = viewModel.movieList;
-            //    return View(viewModel);
-            //}
-
-            return View();
+            return View(new IMDBViewModel());
         }
 
 
@@ -73,44 +284,110 @@ namespace IMDB_Cralwer.Controllers
             //    }
 
             //}
+            Console.WriteLine("Genre =  " + m.chosenGenreId);
+
+            m.clickedSubmit = true;
+
+            //get the connection string from DATABASE_URL = this comes from environment var. On localhost, it will come from path defined in sys properties. When deploying online, will receive it from the database
+            //var connectionString = Environment.GetEnvironmentVariable("DATABASE_URL");
 
 
+            //convert conn string to proper format for Npgsql commands
+            string connString = GetConnectionStringNPG(connectionString);
+            
+            //postgres database connection string
+            //var connectionString = "postgres://ntzgackjldsuog:73596861aaa9efc5b6d46b5c814d1a904bab53a202b08a9d72779915e716a47c@ec2-44-195-169-163.compute-1.amazonaws.com:5432/de7mbvodl8cjk9";
 
-            var connectionString = "Host=localhost;Username=postgres;Password=Apostria1;Database=imdb"; 
-            //var connStringTrusted = "Server=localhost; Database = imdb; Trusted_Connection = True"; //use this if you have set the db to allow you to use windows creds
-            await using var conn = new NpgsqlConnection(connectionString); //create the connection
+            Console.WriteLine(connString);
+
+            //set up and open the connection
+            await using var conn = new NpgsqlConnection(connString); //create the connection
             await conn.OpenAsync();
 
-            /*word = "Clown";*/ //input from IMDB.cshtml on webpage
+            
 
-            string query = "SELECT * FROM mov_table WHERE title LIKE (@p1)"; //leaving out 'title' should select entire table
+            string query = "SELECT * FROM mov_table WHERE title LIKE (@p1)"; 
 
 
-            query = "SELECT * " +
-                "FROM(SELECT mov_table.title, movie_basics.rating, movie_basics.year, genre, runtime " +
-                " FROM mov_table JOIN movie_basics ON mov_table.title = movie_basics.title " +
-                "  WHERE mov_table.title LIKE (@p1) " +
-                "OR  mov_table.title LIKE (@p2) " +
-                "OR movie_basics.genre LIKE (@p3))" +
-                " AS newTable JOIN world_events ON world_events.year = newTable.year " +
-                "JOIN songs ON songs.year = newTable.year " +
-                "ORDER BY rating DESC "+
-                "LIMIT 150";
 
+            string genre = " mbasic.genre LIKE ";
             if (m.shortMovie)
             {
-                Console.WriteLine("Short movie picked");
-                query  = "SELECT * " +
-                "FROM(SELECT mov_table.title, movie_basics.rating, movie_basics.year, genre, runtime " +
-                " FROM mov_table JOIN movie_basics ON mov_table.title = movie_basics.title " +
-                "  WHERE mov_table.title LIKE (@p1) AND movie_basics.runtime < 100 AND movie_basics.runtime != 0 " +
-                "OR  mov_table.title LIKE (@p2) AND movie_basics.runtime < 100 AND movie_basics.runtime != 0 " +
-                "OR movie_basics.genre LIKE (@p3) AND movie_basics.runtime < 100 AND movie_basics.runtime != 0) " +
+
+                //choose genre if selected on page
+                switch (m.chosenGenreId)
+                {
+                    case 1: genre = ""; break;
+                    case 2:
+                        genre += " 'Action' AND ";
+                        break;
+                    case 3:
+                        genre += " 'Comedy' AND ";
+                        break;
+                    case 4:
+                        genre += " 'Drama' AND ";
+                        break;
+                    case 5:
+                        genre += " 'Sci-Fi' AND ";
+                        break;
+                    case 6:
+                        genre += " 'Crime' AND ";
+                        break;
+
+
+                }
+
+                //final query for short movie with genre injected
+                query = "SELECT * " +
+                "FROM (SELECT mov_table.title, mbasic.rating, mbasic.year, genre, runtime , mbasic.titleid " +
+                " FROM mov_table JOIN mbasic ON mov_table.title = mbasic.title " +
+                "WHERE " + genre + " mbasic.runtime < 100 AND mbasic.runtime != 0 " +
+                " AND  (mov_table.title LIKE (@p2) " +
+                " OR mov_table.title LIKE (@p1))) " +
                 " AS newTable JOIN world_events ON world_events.year = newTable.year " +
-                "JOIN songs ON songs.year = newTable.year " +
-                "ORDER BY rating DESC " +
-                "LIMIT 150";
+                "JOIN songs ON songs.year = newTable.year ";
+
+
             }
+            else //all movie lengths
+            {
+                //choose genre if selected on page
+                switch (m.chosenGenreId)
+                {
+                    case 1: genre = ""; break;
+                    case 2:
+                        genre += " 'Action' AND ";
+                        break;
+                    case 3:
+                        genre += " 'Comedy' AND ";
+                        break;
+                    case 4:
+                        genre += " 'Drama' AND ";
+                        break;
+                    case 5:
+                        genre += " 'Sci-F' AND ";
+                        break;
+                    case 6:
+                        genre += " 'Crime' AND ";
+                        break;
+                }
+
+                //final query for non-short movie with genre injected
+                query = "SELECT * " +
+                "FROM (SELECT mov_table.title, mbasic.rating, mbasic.year, genre, runtime , mbasic.titleid " +
+                " FROM mov_table JOIN mbasic ON mov_table.title = mbasic.title " +
+                "WHERE " + genre  +
+                " (mov_table.title LIKE (@p2) " +
+                " OR mov_table.title LIKE (@p1))) " +
+                " AS newTable JOIN world_events ON world_events.year = newTable.year " +
+                "JOIN songs ON songs.year = newTable.year ";
+            }
+
+            
+            //sort by rating and limit to 150 rows
+            query += "ORDER BY rating DESC " +
+                "LIMIT 150";
+
 
 
             //if (useYear) 
@@ -131,7 +408,7 @@ namespace IMDB_Cralwer.Controllers
 
 
             {
-                //DataTable may work now that i figured out the Select * From
+                //DataTable - can convert sql reader into a class object
 
                 //DataTable dt = new DataTable(); //should be able to infer the shcema from the data
                 //dt.Columns.Add("titleId", typeof(string));
@@ -154,24 +431,25 @@ namespace IMDB_Cralwer.Controllers
             await using var reader = await command.ExecuteReaderAsync(); //now we have selected the objects (rows) that fit
 
 
-            //bsed on the errors, reader does not have any columns
 
             while (await reader.ReadAsync())
             {
 
-                //m.movieList.Add(reader.GetData(0));
 
                 //string[] s = new string[7] { reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString(), reader["title"].ToString() };
-                string[] s = new string[6] { GetSafeString(reader, 0), GetSafeString(reader, 1), GetSafeString(reader, 2), GetSafeString(reader, 3),  GetSafeString(reader, 5), GetSafeString(reader, 8)};
+                string[] s = new string[6] { GetSafeString(reader, 0), GetSafeString(reader, 1), GetSafeString(reader, 2), GetSafeString(reader, 3), GetSafeString(reader, 6), GetSafeString(reader, 9) };
 
                 for (int i = 0; i < s.Length; i++)
                 {
                     bool isWatched = false;
-                    foreach (Movie mov in m.movieList) //check if the movie is already watched
+                    if (ViewBag.movieList != null)
                     {
-                        if (mov.isWatched && mov.title == s[0])
+                        foreach (Movie mov in m.movieList) //check if the movie is already watched
                         {
-                            isWatched = true;
+                            if (mov.isWatched && mov.title == s[0])
+                            {
+                                isWatched = true;
+                            }
                         }
                     }
 
@@ -179,8 +457,8 @@ namespace IMDB_Cralwer.Controllers
                     new Movie
                     {
                         title = s[0],
-                        year = s[2],
-                        titleId = "",
+                        year =  s[2],
+                        titleId = GetSafeString(reader, 5),
                         region = "",
                         language = "",
                         types = "",
@@ -191,10 +469,13 @@ namespace IMDB_Cralwer.Controllers
                         genre = s[3],
                         runtime = reader.GetInt16(4),
                         isWatched = isWatched,
-                        artist = s[5]
+                        artist = s[5],
+
+                        wikiLink = "https://www.wikipedia.org/wiki/" + s[2],
+                        imdbLink = "https://www.imdb.com/title/" + reader[5].ToString()
 
 
-                    }) ;
+                    });;
 
 
 
@@ -202,98 +483,155 @@ namespace IMDB_Cralwer.Controllers
 
             }
 
-            //IRepository sqlDb = new SQLDatabase(connectionString); //if use this, move the sql query into the irepos
-            //List<Movie> movies = sqlDb.GetAllMovies();
 
-
-            //need to close the connection at the end
+            // close the connection
             conn.Close();
 
 
+            //add all movies to the list to display
             if (myMovies != null && myMovies.Count > 1)
             {
-
                 m.movieList = myMovies.ToList();
             }
-
-
-                //foreach(Movie mov in myMovies)
-                //{
-                //    m.returnedMovieTitles.Add( FetchStrings("Title", mov)); //get a list of the titles only to display
-                //}
-            
-
-            //RedirectToAction("Create", "Home");
+            m.userWatchedMovies = m.movieList;
         }
 
 
+
         [HttpPost]
-        public  IActionResult IMDB(IMDBViewModel m)
+        public  IActionResult IMDB(IMDBViewModel m) //I must be feeding it a new viewmodel every refresh            
         {
-            //if (viewModel == null)
+
+
+            ViewBag.username = HttpContext.Session.GetString("UserSession");
+            //get movie list from sql
+
+            ProcessSqlMovieList(true);
+
+            //if (HttpContext.Session.Get("Movies") != null)
             //{
-            //    viewModel = m;
+            //    byte[] bytes = HttpContext.Session.Get("Movies");
+            //    string movies = System.Text.Encoding.UTF8.GetString(bytes);
+            //    watchedMovieTitles = movies.Split(',').ToList();
             //}
-            //else
-            //{
-            //    m = viewModel;
-            //    Console.WriteLine("View model not null");
-            //}
+
+
+            if (watchedMovieTitles == null)
+            { watchedMovieTitles = new List<string>(); }
+
+
+
+            if (ViewBag.username != null)
+            { Console.WriteLine(ViewBag.username); }
 
             if (m.titleInput != "")
             {
                 ProcessKeyWord(m.titleInput, m);
             }
-            System.Threading.Thread.Sleep(500); //crucial - makes system pause while loading results from ProcessKeyWord()
-
-            //if (m.movieList != null && m.movieList.Count > 0)
-            //{
-            //    Console.WriteLine("MovieList not null");  
-            //    SaveWatchedMovies(m); 
-            //    System.Threading.Thread.Sleep(500);
-            //}
-            //else 
-            //{ 
-            //    Console.WriteLine("Null"); 
-            //}
+            System.Threading.Thread.Sleep(1200); //crucial - makes system pause while loading results from ProcessKeyWord()
 
 
-            
-            int k = 0;
-            for(int i = 0; i < m.movieList.Count; i++)
-            {
-                if (m.movieList[i].isWatched)
-                {
-                    k++;
-                }
-            }
-            //Console.WriteLine(k + "  watched");
-
+            byte[] byteArray = watchedMovieTitles.SelectMany(s => System.Text.Encoding.UTF8.GetBytes(s + ',')).ToArray();
+            HttpContext.Session.Set("Movies", byteArray);
 
 
             return View(m);
         }
 
 
-        public void SaveWatchedMovies(IMDBViewModel m)
+        //saving movies for user
+        public IActionResult OnCheckChange( string id)
         {
-            foreach (Movie movie in m.movieList)
+
+            byte[] byteArray =  HttpContext.Session.Get("Movies");
+            string movies  = System.Text.Encoding.UTF8.GetString(byteArray);
+            watchedMovieTitles = movies.Split(',').ToList();
+            
+            Console.Write(watchedMovieTitles[0].ToString());
+
+           
+            SerializeSavedMovieTitles(); 
+            return NoContent();
+
+        }
+
+
+        async void ProcessSqlMovieList(bool get)
+        {
+
+            if (get)
             {
-                //Console.WriteLine(movie.title);
-                if (movie.isWatched)
+                byte[] byteArray = HttpContext.Session.Get("Movies");
+                if (byteArray != null)
                 {
-                    watchedMovies.Add(movie);
-                    Console.WriteLine("Added " + movie.title);
+                    string movies = System.Text.Encoding.UTF8.GetString(byteArray);
+                    //watchedMovieTitles = movies.Split(',').ToList();
+                    string[] movieSplit = movies.Split(',');
+                    
                 }
+            }
+            else
+            {
+                byte[] byteArray = HttpContext.Session.Get("Movies");
+                string movies = System.Text.Encoding.UTF8.GetString(byteArray);
+                //watchedMovieTitles = movies.Split(',').ToList();
+                string[] movieSplit = movies.Split(',');
+
+
             }
         }
 
-        public void SaveWatchedMovieChecked(Movie mov)
+
+
+        void SerializeSavedMovieTitles()
         {
-            watchedMovies.Add(mov);
-            Console.WriteLine(mov.title + " Added");
+            //string allWatchedTitles = "";
+            //foreach(string s in watchedMovieTitles)
+            //{
+            //    allWatchedTitles += s;
+            //}
+
+
+
+            //string serialized = JsonSerializer.Serialize(watchedMovieTitles);
+            //Console.WriteLine(serialized);
+
+            byte[] byteArray = watchedMovieTitles.SelectMany(s => System.Text.Encoding.UTF8.GetBytes(s + Environment.NewLine)).ToArray();
+
+            HttpContext.Session.Set("Movies", byteArray);
         }
 
+        public IActionResult RemoveFromWatchedList(string id)
+        {
+            //if this movie is in the watchedMovieTitles, remove it
+            if (watchedMovieTitles.Contains(id))
+            {
+                watchedMovieTitles.Remove(id);
+            }
+            SerializeSavedMovieTitles();
+            return NoContent();
+        }
+
+        //helper functions
+        public string GetConnectionStringNPG(string uri)
+        {
+            var databaseUri = new Uri(uri);
+            var userInfo = databaseUri.UserInfo.Split(':');
+
+            var builder = new NpgsqlConnectionStringBuilder
+            {
+                Host = databaseUri.Host,
+                Port = databaseUri.Port,
+                Username = userInfo[0],
+                Password = userInfo[1],
+                Database = databaseUri.LocalPath.TrimStart('/')
+            };
+
+            return builder.ToString();
+        }
+
+
+   
 
         public string FetchStrings(string requestedMovieProperty, Movie mov)
         {
@@ -319,11 +657,6 @@ namespace IMDB_Cralwer.Controllers
             }
         }
 
-        public void OnCheckChange()
-        {
-            Console.WriteLine("Ran OnCheckChagne");
-            //Response.Write(Request.RawUrl.ToString());
-        }
 
 
         //[HttpPost]
@@ -366,7 +699,18 @@ namespace IMDB_Cralwer.Controllers
         //    return View(m);
         //}
 
+        string TrimFirstChar(string s)
+        {
 
+            s = s.Remove(0, 1); 
+            return s;
+        }
+        string TrimLastChar(string s)
+        {
+
+            s = s.Remove(s.Length - 1 , 1);
+            return s;
+        }
 
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]

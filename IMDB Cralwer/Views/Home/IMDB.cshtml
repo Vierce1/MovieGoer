@@ -19,17 +19,18 @@
     @using (Html.BeginForm("IMDB", "Home", FormMethod.Post))
     {<table cellpadding="0" cellspacing="0">
             <tr>
-                <th colspan="2" align="center">Enter a keyword for a movie you would like to watch. This could be a topic, a genre, a place, an event, or any other attribute.</th> 
+                <th colspan="2" align="center">Enter a topic, genre, place, event, or any other keyword for a movie you would like to watch.<br> Leave blank and choose a genre to see all entries.</th> 
                 <!-- entering a keyword above should search for Titles AND Genres OR if you enter a year (4 digits) it will search by that-->
             </tr>
             <tr>
                 <td>Keyword: 
                     
-                        @Html.TextBoxFor(m => m.titleInput, new {onKeyDown="blockSpace()", value=""})
+                        @Html.TextBoxFor(m => m.titleInput /*, new {onKeyDown="blockSpace()", value=""}*/)
                     <input type="submit" value="Submit"/>
                     
                 </td>
             </tr>
+
            @*  <tr>
                 <th colspan="2" align="center">Enter a year around which you would like to see a movie (leave blank to see all results).</th> 
                 <!-- entering a keyword above should search for Titles AND Genres OR if you enter a year (4 digits) it will search by that-->
@@ -49,25 +50,51 @@
                 <td>
                 @Html.CheckBoxFor(m=> m.shortMovie) Give me a short movie!
                 </td>
+                                        <tr>
+                            <td>
+
+
+                               
+             
+                 @Html.DropDownListFor(m => m.chosenGenreId, 
+                         new SelectList(Model.Genres, "GenreId", "GenreName")) 
+             
+             </td>
             </tr>
+            
             
         </table>}
 </div>
 
+<div>
 
 
-<!-- displays on the page if model is not null and we've hit submit-->
+        
+
+    
+
+</div>
+
+<!-- displays on the page if model is not null and  hit submit-->
 <div >
-@if (Model != null )
+    @if (Model != null && Model.movieList.Count > 1)
     {
+        @*Model.movieList = ViewBag.*@
         <br /><br />
         <p>Searched keyword: <strong> @Html.DisplayFor(m => m.titleInput) </strong></p> 
         <p>Done! Here is what I found for you. </p> 
 
+             @*@using (Html.BeginForm("IMDB", "Home", FormMethod.Post))
+              {
+                <button type="submit"   id="SaveMovies" value="Save Movies" onclick="SaveMovies"   CausesValidation="False" UseSubmitBehavior="false" asp-action="SaveMovies">Save Movies</button>
+              }*@
 
         <table class="table table-hover">
             <thead class="table-new">
                 <tr>
+                    @*<th>
+                        Watched
+                    </th>*@
                     <th>
                         Title
                     </th>
@@ -86,6 +113,9 @@
                     <th>
                         Top Billboard Artist
                     </th>
+                    <th>
+                        Wiki/year
+                    </th>
                 </tr>
             </thead>
             <tbody>
@@ -96,13 +126,19 @@
                     {
 
                         <tr>
+                           @* <td>*@
+                            @*recolor the row if watched*@
+                                @*< checked="checked" id="Checkbox" OnCheckedChanged="OnCheckChange" AutoPostBack="True" runat="server"/>*@
+                              @*  @using (Html.BeginForm("IMDB", "Home", FormMethod.Post))
+                            {*@
+                             @*@Html.CheckBoxFor(m=> m.movieList[i].isWatched, new {Value = @Model.movieList[i].isWatched, @OnClick="OnCheckChange()", @class = "toggle", url = Url.Action("OnCheckChange", "Home")})*@
+                             @*<input id="watched" name="watched" value="True" type="checkbox" onchange="OnCheckChange" asp-action="OnCheckChange" />*@
+                            @* <button type="submit" name="id" id=Model.movieList[i] value=@Model.movieList[i].title onclick="OnCheckChange"    CausesValidation="False" UseSubmitBehavior="false" asp-action="OnCheckChange">Watched</button>
+                              <button type="submit" name="id" id=Model.movieList[i] value=@Model.movieList[i].title onclick="RemoveFromWatchedList"    CausesValidation="False" UseSubmitBehavior="false" asp-action="RemoveFromWatchedList">Unwatch</button>
+                            }*@
                             
-                                @*recolor the row if watched
-                                    <asp:CheckBox id="Checkbox" OnCheckedChanged="OnCheckChange" AutoPostBack="True" runat="server"/>*@
-                                @Html.CheckBoxFor(m=> m.movieList[i].isWatched, new {Value = @Model.movieList[i].isWatched, @OnClick="OnCheckChange()"})
-                                
-                                    @*@Html.HiddenFor(m => m.movieList[i].title)*@
-@*
+                            @*@Html.HiddenFor(m => m.movieList[i].title)*@
+                            @*
                                 <input data-val="true" 
                                 data-val-required="The isActive field is required." 
                                 id="isWatched" 
@@ -112,11 +148,12 @@
                                 <input name="isActive" type="hidden" value="false" />*@
 
 
+                            @*</td>*@
 
 
-                                                       
                             <td>
-                                <p> <strong>@Html.DisplayFor(model => Model.movieList[i].title)  <br /> </strong></p>
+                                <p> <strong> <a id="HyperLink2" href = @Model.movieList[i].imdbLink >@Model.movieList[i].title</a>  
+                                        @*@Html.DisplayFor(model => Model.movieList[i].title)  <br /> </strong></p>*@
                             </td>
                             <td>
                                 @Html.DisplayFor(model => Model.movieList[i].rating)
@@ -125,17 +162,21 @@
                                 @Html.DisplayFor(model => Model.movieList[i].genre)
                             </td>
                             <td>
-                                @if(Model.movieList[i].runtime != 0)
+                                @if (Model.movieList[i].runtime != 0)
                                 {
                                     @Html.DisplayFor(model => Model.movieList[i].runtime)
                                 }
-                                
+
                             </td>
                             <td>
                                 @Html.DisplayFor(model => Model.movieList[i].worldEvent)
                             </td>
                             <td>
                                 @Html.DisplayFor(model => Model.movieList[i].artist)
+                            </td>
+                            <td>
+
+                                <a id="HyperLink1" href = @Model.movieList[i].wikiLink; >@Model.movieList[i].year</a>  
                             </td>
                         </tr>
 
@@ -146,23 +187,19 @@
 
                     }
                 }
-                
+
 
 
             </tbody>
 
         </table>
-@*                    @using (Html.BeginForm("IMDB", "Home", FormMethod.Post)){
-        <input type="submit" value="Submit"/>
-                    }*@
 
-        @*        <script> //js fill table
-            function(){
-            var 
-            }
-            </script>*@
-
-        @*</div>*@
+    }
+    else if (Model.movieList.Count == 0 && Model.clickedSubmit)
+    {
+                <br /><br />
+        <p>Searched keyword: <strong> @Html.DisplayFor(m => m.titleInput) </strong></p> 
+        <p>No results... try another keyword. (Hint: broad categories work best!) </p> 
     }
     <br />
 </div>

@@ -8694,11 +8694,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "H:\\C# Projects\\IMDB Cralwer\\IMDB Cralwer\\IMDB Cralwer.csproj",
-      "projectName": "IMDB Cralwer",
-      "projectPath": "H:\\C# Projects\\IMDB Cralwer\\IMDB Cralwer\\IMDB Cralwer.csproj",
+      "projectUniqueName": "H:\\MovieGoer - Copy - before connectionstring\\IMDB Cralwer\\MovieGoer.csproj",
+      "projectName": "MovieGoer",
+      "projectPath": "H:\\MovieGoer - Copy - before connectionstring\\IMDB Cralwer\\MovieGoer.csproj",
       "packagesPath": "C:\\Users\\awest\\.nuget\\packages\\",
-      "outputPath": "H:\\C# Projects\\IMDB Cralwer\\IMDB Cralwer\\obj\\",
+      "outputPath": "H:\\MovieGoer - Copy - before connectionstring\\IMDB Cralwer\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
@@ -8762,7 +8762,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.201\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\6.0.202\\RuntimeIdentifierGraph.json"
       }
     }
   },

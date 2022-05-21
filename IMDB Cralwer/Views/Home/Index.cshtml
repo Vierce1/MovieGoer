@@ -1,7 +1,9 @@
-@{
-    ViewData["Title"] = "Movie Goer";
-}
+@model IndexViewModel
 
+@{
+    ViewData["Title"] = "MovieGoer";
+}
+@*header and logo*@
 <div>
             <table>
             <thead class="table-new">
@@ -11,7 +13,7 @@
                            </th>
                            <th class="text-chenter">
                                <h1>
-                               MovieGoer is an expansive movie suggestion app dedicated to transporting you back in time to experience a movie.
+                               MovieGoer is an expansive movie suggestion app - dedicated to transporting you back in time to experience a movie and surrounding culture.
                                </h1>
                            </th>
                   </tr>
@@ -19,11 +21,53 @@
       
 </div>
 
-@*<div class="text-center" style = "margin-left: -60px; margin-top: 40px; margin-right: 800px;" >
+@*registration/sign in*@
+@if (Model == null || Model.usernameInvalid || Model.usernameTaken || Model.passwordInvalid || Model.couldNotSignIn)
+{
 
-    <h1>MovieGoer is an expansive movie suggestion application dedicated to transporting you back in time to experience a movie.
-    </h1>
-</div>*@
+    @using (Html.BeginForm("Index", "Home", FormMethod.Post))
+    {
+        <head> Register to save movies
+        </head> 
+
+
+        <table> 
+            <tr> 
+                <td> Username: </td> <td>  @Html.TextBoxFor(m => m.userName, new {placeholder="Username"}) 
+                </td> 
+            </tr>
+            <tr> 
+                <td> Password: </td> <td>  @Html.TextBoxFor(m => m.password, new {  placeholder="Password" , @class="input[type=password]:not(:placeholder-shown)" }) 
+                </td> 
+            </tr> 
+        </table> 
+
+        <td>
+           <button type="submit"   id="SignIn" value="Sign In" onclick="SignInOnClick"   CausesValidation="False" UseSubmitBehavior="false" asp-action="SignInOnClick">Sign In</button>
+            <button type="submit"   id="Register" value="Register" onclick="RegisterOnClick"   CausesValidation="False" UseSubmitBehavior="false" asp-action="RegisterOnClick">Register</button>
+
+        </td>
+    }
+}
+<div>
+    @if(Model != null)
+    {
+        @if(Model.usernameInvalid){ <p>Username invalid - must be between 6 - 20 characters</p>}
+    @if(Model.usernameTaken){ <p>Username taken, please try another</p>}
+    @if(Model.passwordInvalid) { <p>Password invalid - must be between 8 - 20 characters & contain at least one number.</p>}
+    @if(Model.couldNotSignIn) { <p> Could not sign in. Username or Password incorrect</p>}
+
+}
+@if(Model !=null)
+{
+   @if(Model.signedIn) {<p> Signed in!</p>}    
+}
+    
+</div>
+
+
+
+
 <div class="text-center" style = "margin-left: 200px; margin-right: 200px;">
     <h1 style = "color:#00227c; font-size:20px;">
         <br />
